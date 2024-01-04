@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>跳转中</title>
+</head>
+<body>
+  <h1 id="info">正在请求中...</h1>
+  <script>
+    var codeUrl = "https://elb-prd.zenhr.cn/HR/HRWeb/Forms/Attendance/att_qrcode_ns.aspx?para1=kr75PXKlP0y%2FHom2V8XFCDwYG8%2FoXgB%2FZPEnKlO3t9BBJTwiniX%2Fg8%2Bd528%2Fxl54mAY5zioQHmzsvL339Xu5aYqSrPlAgclKdrT6avD3%2FpQz%2BM7avRcagw%3D%3D&to_cocode=1230327001";
+    var baseUrl = "https://elb-prd.zenhr.cn/HR/HRATT/att_check.aspx?para1=";
+    var para = "";
+    // 发送请求的函数
+    function sendRequest() {
+      const body = new FormData();
+      body.append("para1", "kr75PXKlP0y/Hom2V8XFCDwYG8/oXgB/ZPEnKlO3t9BBJTwiniX/g8+d528/xl54mAY5zioQHmzsvL339Xu5aYqSrPlAgclKdrT6avD3/pQz+M7avRcagw=="); // 添加表单字段
+      body.append("company_code", "1230327001");
+      fetch("https://elb-prd.zenhr.cn/HR/HRWS3/WS.FWK?handlerName=biz_ws&METHOD=create_qrcode_url", {
+        method: "POST", // 设置请求方法为 POST
+        body: body // 将 FormData 对象作为请求体发送
+      }).then(response => response.json()) // 将响应解析为 JSON 格式
+        .then(data => {
+          document.getElementById('info').textContent = "请求成功，跳转中"
+          document.getElementById('info').addEventListener("click", function (){
+            window.location.href = baseUrl + para
+          }, { once: true })
+          console.log(data);
+          para = data.extF1;
+          window.location.href = baseUrl + para
+        })
+        .catch(error => {
+          document.getElementById('info').textContent = "请求失败，点击手动扫码"
+          document.getElementById('info').addEventListener("click", function (){
+            window.location.href = codeUrl
+          }, { once: true })
+          console.error("请求失败:", error);
+        });
+    }
+
+    // 在页面加载完成后发送请求并跳转到百度
+    window.onload = function() {
+      sendRequest();
+    };
+  </script>
+</body>
+</html>
