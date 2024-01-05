@@ -24,7 +24,7 @@
             window.location.href = baseUrl + para
           }, { once: true })
           console.log(data);
-          para = encodeURI(data.extF1);
+          para = encodeURIComponent(data.extF1);
           console.log(para);
           console.log(baseUrl + para);
           window.location.href = baseUrl + para
